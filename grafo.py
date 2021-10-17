@@ -127,41 +127,87 @@ class Grafo:
         padres = padres[::-1]
         return distancia , padres
 
+    
+    
     #Método de costo uniforme
     def costoUniforme (self, verticeStart, verticeFinal):
         
         for u in self.vertices.values ():
             u.color = "white"
             u.padre = None
-            u.distancia = sys.maxsize
+            u.distancia = 0
         
         #recuperar del diccionario, el objeto cuya llave sea nombreStart
         verticeStart.color = "gris"
         verticeStart.padre = None
-        verticeStart.distancia = 0
-
+        contador = 0
         queue = [ ]
         queue.append ( verticeStart ) #Se le agrega la referencia al verticeStart
+        
+        print ("Paso:  " + str(contador) + ":      " )
+        contador = contador + 1
+        print(verticeStart)
+
+
         while len (queue) > 0 :   
             u = queue.pop (0)
-                
+            print("_________________________________________")   
+            
+            if u is verticeFinal:
+                break
+            
+            print ("Paso:  " + str(contador) + ":      " )
+            print("\nCiudad expandida: " + u.nombre)
+            
             for v in u.vecinos :
-                distanciaMin = sys.maxsize
+                
+                if v.padre != None:
+                    auxDistancia = u.distancia + u.vecinos.get(v)
+                    
+                    if auxDistancia < v.distancia:
+                        v.padre = u
+                        v.distancia = auxDistancia
+                        
+
                 if v.color == "white" :
                     v.color= "gris"
                     v.padre = u 
-                    v.distancia = v.distancia + u.vecinos.get(v)
+                    v.distancia = u.distancia + u.vecinos.get(v)
+
                     queue.append ( v )
+                    #ordenar la cola del menor al mayor
+                    queue = sorted(queue, key=lambda vertice: vertice.distancia)
+                
+                
+                u.color = "negro"
+            for item in queue:
+                print("\n")
+                self.imprimirRutaCostoUniforme(item)
+
+            contador = contador + 1
+            
+    def imprimirRutaCostoUniforme(self, item):
+
+        padres = [ ]
+        aux = Vertice ("aux")
+        padres.append (item)
 
 
+        if aux == None: 
+            print(".")
+        else: 
+            aux = item.padre 
+            while aux.padre != None: 
+                padres.append (aux)
+                aux = aux.padre 
+            padres.append(aux)
+        padres = padres[::-1]    
 
-            u.color = "negro"
+        print(padres)
 
-            if u is verticeFinal:
-                break
+        print("Distancia:  " + str(item.distancia))
 
 
-    
     def encontrarCaminoCostoUniforme (self, nombreStart, nombreFinal):
         distancia = 0
 
@@ -178,11 +224,12 @@ class Grafo:
         verticeFinal = self.vertices[nombreFinal] 
         self.costoUniforme(verticeStart, verticeFinal)
 
+
         padres.append (verticeFinal)
         aux = Vertice ("aux")
         aux = verticeFinal.padre 
         distancia = verticeFinal.vecinos.get(aux)
-        '''
+
         while aux.padre != None: 
             padres.append (aux)
             distancia = distancia + aux.vecinos.get(aux.padre)
@@ -191,4 +238,5 @@ class Grafo:
         padres = padres[::-1]
         return distancia , padres
 
-    '''
+    
+   

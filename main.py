@@ -54,15 +54,16 @@ if __name__ == "__main__":
 
     #3. Llenar el grafo con las ciudades
     llenarGrafo(grafoMapa)
-
+    #print(grafoMapa)
+    
     #4. BFS
     #distacia, padres = grafoMapa.encontrarCaminoBFS("Arad", "Bucharest")
     #print(padres)
     #print("Distancia: " + str(distacia))
 
     #5. Costo Uniforme
-    #distancia1, padres1 = grafoMapa.encontrarCaminoCostoUniforme("Arad", "Bucharest")
-    #print(padres1)
-    #print("Distancia: " + str(distancia1))
-    grafoMapa.encontrarCaminoCostoUniforme("Arad", "Bucharest")
+    distancia1, padres1 = grafoMapa.encontrarCaminoCostoUniforme("Timisoara", "Eforie")
+    print("\nRuta: ")
+    print(padres1)
+    print("Distancia: " + str(distancia1))
     
